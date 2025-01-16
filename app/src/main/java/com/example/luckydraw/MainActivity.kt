@@ -14,14 +14,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFrom
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -30,14 +27,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.luckydraw.ui.theme.LuckyDrawTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.cos
 import kotlin.math.sin
@@ -58,21 +54,31 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun LuckyDrawScreen() {
-    val items = listOf("Prize 1", "Prize 2", "Prize 3", "Prize 4", "Prize 5")
+//    val items = listOf("Prize 1", "Prize 2", "Prize 3", "Prize 4", "Prize 5")
+    val items = listOf("Prize 1", "Prize 2", "Prize 3", "Prize 4", "Prize 5", "Prize 6")
     val selectedIndex = remember { mutableStateOf(-1) }
+    val onSpinEnd = remember { mutableStateOf(false) }
 
-    LuckyDrawWheel(items = items) { resultIndex ->
+    LuckyDrawWheel(items = items) { resultIndex, onSpinFinished ->
         selectedIndex.value = resultIndex
+        onSpinEnd.value = onSpinFinished
+    }
+
+    if (onSpinEnd.value) {
+        Toast.makeText(LocalContext.current,
+            "Congratulations!\n${items[selectedIndex.value]}",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
 
-
 @Composable
-fun LuckyDrawWheel(items: List<String>, onSpinEnd: (Int) -> Unit) {
+fun LuckyDrawWheel(items: List<String>, onSpinEnd: (Int, Boolean) -> Unit) {
     val rotation = remember { Animatable(0f) }
     val itemAngle = 360f / items.size
     val coroutineScope = rememberCoroutineScope()
-    val animationFinished: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val animationFinished = remember { mutableStateOf(false) }
+    val selectedIndex = remember { mutableStateOf(-1) }
     val colorList = mutableListOf(Color.Cyan, Color.Magenta, Color.Gray, Color.White, Color.Red, Color.Green, Color.Blue, Color.Yellow)
 
     Box(
@@ -115,7 +121,7 @@ fun LuckyDrawWheel(items: List<String>, onSpinEnd: (Int) -> Unit) {
                     .size(24.dp)
                     .align(Alignment.TopCenter)
                     .rotate(180f)
-                    .background(Color.Red, shape = GenericShape { size, _ -> // TriangleShape
+                    .background(Color.Black, shape = GenericShape { size, _ -> // TriangleShape
                         moveTo(size.width / 2, 0f)
                         lineTo(0f, size.height)
                         lineTo(size.width, size.height)
@@ -124,52 +130,64 @@ fun LuckyDrawWheel(items: List<String>, onSpinEnd: (Int) -> Unit) {
             )
         }
 
-        var selectedIndex = 0
         Button(
             onClick = {
                 coroutineScope.launch {
                     animationFinished.value = false
-                    val targetRotation = (360f * 5) + (360f - (0 until items.size).random() * itemAngle)
+                    val randomStop = (0 until items.size).random() // Random item index
+                    val targetRotation = (rotation.targetValue) + (4 * 360f) + randomStop * itemAngle
                     rotation.animateTo(
                         targetValue = targetRotation,
                         animationSpec = tween(durationMillis = 3000, easing = LinearEasing)
                     ) {
                         if (value == targetRotation) {
+                            selectedIndex.value = ((rotation.targetValue % 360) / itemAngle).toInt()
                             animationFinished.value = true
-                            onSpinEnd(selectedIndex)
+                            onSpinEnd(selectedIndex.value, animationFinished.value)
                         }
                     }
-                    val finalRotation = (rotation.value % 360)
-                    selectedIndex = ((360f - finalRotation) / itemAngle).toInt() % items.size
-
                 }
             }) {
             Text("Spin")
         }
+
+        Button(
+            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 100.dp),
+            onClick = {
+                coroutineScope.launch {
+                    rotation.animateTo(
+                        targetValue = 0f,
+                        animationSpec = tween(durationMillis = 6000, easing = LinearEasing)
+                    )
+                }
+            }
+        ){
+            Text("Reset")
+        }
+
         if (animationFinished.value) {
             Text(
-                text = "We Got ${items[selectedIndex]}!",
+                text = "We Got ${items[selectedIndex.value]}\n${rotation.targetValue}\n$itemAngle",
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 120.dp),
+                    .align(Alignment.TopCenter)
+                    .padding(top = 120.dp),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
-//            Toast.makeText(LocalContext.current, "Congratulations!\n${items[selectedIndex]}", Toast.LENGTH_SHORT).show()
         }
     }
 }
 
 
 @Composable
-fun ShowToastButton(btn: String = "Show Toast", text: String) {
+fun ShowToast(btnTxt: String = "Show Toast", text: String) {
     val context = LocalContext.current
 
     Button(onClick = {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }) {
-        Text("Show Toast")
+        Text(text = btnTxt)
     }
 }
 
