@@ -10,30 +10,31 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFrom
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.luckydraw.ui.theme.LuckyDrawTheme
@@ -74,64 +75,84 @@ fun LuckyDrawWheel(items: List<String>, onSpinEnd: (Int) -> Unit) {
     val animationFinished: MutableState<Boolean> = remember { mutableStateOf(false) }
     val colorList = mutableListOf(Color.Cyan, Color.Magenta, Color.Gray, Color.White, Color.Red, Color.Green, Color.Blue, Color.Yellow)
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Canvas(modifier = Modifier.size(300.dp)) {
-            items.forEachIndexed { index, item ->
-                val startAngle = index * itemAngle
-                drawArc(
-                    color = colorList[index%colorList.size],
-                    startAngle = startAngle,
-                    sweepAngle = itemAngle,
-                    useCenter = true
-                )
-                val textAngle = startAngle + itemAngle / 2
-                val textRadius = size.minDimension / 3
-                val textPosition = Offset(
-                    (center.x + textRadius * cos(Math.toRadians(textAngle.toDouble()))).toFloat(),
-                    (center.y + textRadius * sin(Math.toRadians(textAngle.toDouble()))).toFloat()
-                )
-                drawContext.canvas.nativeCanvas.apply {
-                    drawText(
-                        item,
-                        textPosition.x,
-                        textPosition.y,
-                        Paint().apply {
-                            textSize = 30f
-                            textAlign = Paint.Align.CENTER
-                            color = android.graphics.Color.BLACK
-                        }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Box (modifier = Modifier.size(320.dp)) {
+            Canvas(modifier = Modifier.fillMaxSize().padding(top = 8.dp).rotate(rotation.value)) {
+                items.forEachIndexed { index, item ->
+                    val startAngle = index * itemAngle
+                    drawArc(
+                        color = colorList[index%colorList.size],
+                        startAngle = startAngle,
+                        sweepAngle = itemAngle,
+                        useCenter = true
                     )
-                }
-            }
-        }
-
-        val selectedIndex = (0 until items.size).random()
-        Button(
-            onClick = {
-            coroutineScope.launch {
-                animationFinished.value = false
-                val targetRotation = (360f * 5) + (360f - (selectedIndex * itemAngle))
-                rotation.animateTo(
-                    targetValue = targetRotation,
-                    animationSpec = tween(durationMillis = 3000, easing = LinearEasing)
-                ) {
-                    if (value == targetRotation) {
-                        animationFinished.value = true
-                        onSpinEnd(selectedIndex)
+                    val textAngle = startAngle + itemAngle / 2
+                    val textRadius = size.minDimension / 3
+                    val textPosition = Offset(
+                        (center.x + textRadius * cos(Math.toRadians(textAngle.toDouble()))).toFloat(),
+                        (center.y + textRadius * sin(Math.toRadians(textAngle.toDouble()))).toFloat()
+                    )
+                    drawContext.canvas.nativeCanvas.apply {
+                        drawText(
+                            item,
+                            textPosition.x,
+                            textPosition.y,
+                            Paint().apply {
+                                textSize = 50f
+                                textAlign = Paint.Align.CENTER
+                                color = android.graphics.Color.BLACK
+                            }
+                        )
                     }
                 }
             }
-        }) {
-            Text("Spin")
+            /* The Pointer at the top */
+            Box(
+                Modifier
+                    .size(24.dp)
+                    .align(Alignment.TopCenter)
+                    .rotate(180f)
+                    .background(Color.Red, shape = GenericShape { size, _ -> // TriangleShape
+                        moveTo(size.width / 2, 0f)
+                        lineTo(0f, size.height)
+                        lineTo(size.width, size.height)
+                        close()
+                    })
+            )
         }
 
+        var selectedIndex = 0
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    animationFinished.value = false
+                    val targetRotation = (360f * 5) + (360f - (0 until items.size).random() * itemAngle)
+                    rotation.animateTo(
+                        targetValue = targetRotation,
+                        animationSpec = tween(durationMillis = 3000, easing = LinearEasing)
+                    ) {
+                        if (value == targetRotation) {
+                            animationFinished.value = true
+                            onSpinEnd(selectedIndex)
+                        }
+                    }
+                    val finalRotation = (rotation.value % 360)
+                    selectedIndex = ((360f - finalRotation) / itemAngle).toInt() % items.size
+
+                }
+            }) {
+            Text("Spin")
+        }
         if (animationFinished.value) {
             Text(
                 text = "We Got ${items[selectedIndex]}!",
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 100.dp),
-                fontSize = 16.sp,
+                    .padding(bottom = 120.dp),
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
