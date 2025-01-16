@@ -79,18 +79,30 @@ fun LuckyDrawWheel(items: List<String>, onSpinEnd: (Int, Boolean) -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val animationFinished = remember { mutableStateOf(false) }
     val selectedIndex = remember { mutableStateOf(-1) }
-    val colorList = mutableListOf(Color.Cyan, Color.Magenta, Color.Gray, Color.White, Color.Red, Color.Green, Color.Blue, Color.Yellow)
+    val colorList = mutableListOf(
+        Color.Cyan,
+        Color.Magenta,
+        Color.Gray,
+        Color.White,
+        Color.Red,
+        Color.Green,
+        Color.LightGray,
+        Color.Yellow
+    )
 
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Box (modifier = Modifier.size(320.dp)) {
-            Canvas(modifier = Modifier.fillMaxSize().padding(top = 8.dp).rotate(rotation.value)) {
-                items.forEachIndexed { index, item ->
+        Box(modifier = Modifier.fillMaxWidth().aspectRatio(1f)) {
+            Canvas(modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+                .rotate(rotation.value)) {
+                items.forEachIndexed { index, text ->
                     val startAngle = index * itemAngle
                     drawArc(
-                        color = colorList[index%colorList.size],
+                        color = colorList[index % colorList.size],
                         startAngle = startAngle,
                         sweepAngle = itemAngle,
                         useCenter = true
@@ -103,7 +115,7 @@ fun LuckyDrawWheel(items: List<String>, onSpinEnd: (Int, Boolean) -> Unit) {
                     )
                     drawContext.canvas.nativeCanvas.apply {
                         drawText(
-                            item,
+                            text,
                             textPosition.x,
                             textPosition.y,
                             Paint().apply {
