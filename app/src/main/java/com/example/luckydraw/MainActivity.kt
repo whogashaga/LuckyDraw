@@ -7,12 +7,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.GenericShape
@@ -42,30 +45,30 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+//        enableEdgeToEdge()
 
         setContent {
             LuckyDrawTheme(darkTheme = false) {
-                LuckyDrawScreen()
+                LuckyDrawScreen("The Winner is ")
             }
         }
     }
 }
 
 @Composable
-fun LuckyDrawScreen() {
-//    val items = listOf("Prize 1", "Prize 2", "Prize 3", "Prize 4", "Prize 5")
-    val items = listOf("Prize 1", "Prize 2", "Prize 3", "Prize 4", "Prize 5", "Prize 6")
+fun LuckyDrawScreen(prefix: String = "") {
+    val items = listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12")
     val selectedIndex = remember { mutableStateOf(-1) }
     val onSpinEnd = remember { mutableStateOf(false) }
 
-    LuckyDrawWheel(items = items) { resultIndex, onSpinFinished ->
+    LuckyDrawWheel(items = items, prefix = prefix) { resultIndex, onSpinFinished ->
         selectedIndex.value = resultIndex
         onSpinEnd.value = onSpinFinished
     }
 
     if (onSpinEnd.value) {
-        Toast.makeText(LocalContext.current,
+        Toast.makeText(
+            LocalContext.current,
             "Congratulations!\n${items[selectedIndex.value]}",
             Toast.LENGTH_SHORT
         ).show()
@@ -73,7 +76,7 @@ fun LuckyDrawScreen() {
 }
 
 @Composable
-fun LuckyDrawWheel(items: List<String>, onSpinEnd: (Int, Boolean) -> Unit) {
+fun LuckyDrawWheel(items: List<String>, prefix: String = "", onSpinEnd: (Int, Boolean) -> Unit) {
     val rotation = remember { Animatable(0f) }
     val itemAngle = 360f / items.size
     val coroutineScope = rememberCoroutineScope()
@@ -175,26 +178,31 @@ fun LuckyDrawWheel(items: List<String>, onSpinEnd: (Int, Boolean) -> Unit) {
         }
 
         Button(
-            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 100.dp),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 100.dp),
             onClick = {
                 coroutineScope.launch {
+                    animationFinished.value = false
                     rotation.animateTo(
                         targetValue = 0f,
-                        animationSpec = tween(durationMillis = 6000, easing = LinearEasing)
+                        animationSpec = tween(durationMillis = 800, easing = LinearEasing)
                     )
+
                 }
             }
-        ){
+        ) {
             Text("Reset")
         }
 
         if (animationFinished.value) {
+            val text = if (prefix.isEmpty()) "We Got " else prefix
             Text(
-                text = "We Got ${items[selectedIndex.value]}\n${rotation.targetValue}\n$itemAngle",
+                text = "$text${items[selectedIndex.value]}",
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 120.dp),
-                fontSize = 24.sp,
+                    .padding(top = 60.dp),
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
