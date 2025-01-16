@@ -142,22 +142,33 @@ fun LuckyDrawWheel(items: List<String>, onSpinEnd: (Int, Boolean) -> Unit) {
             )
         }
 
+        // Each item pair to each angle range
+        val ranges: List<ClosedFloatingPointRange<Float>> = items.mapIndexed { index, _ ->
+            val start = index * itemAngle
+            val end = if (index == items.size - 1) 360f else start + itemAngle
+            start..end
+        }
+
         Button(
             onClick = {
+                animationFinished.value = false
                 coroutineScope.launch {
-                    animationFinished.value = false
-                    val randomStop = (0 until items.size).random() // Random item index
-                    val targetRotation = (rotation.targetValue) + (4 * 360f) + randomStop * itemAngle
+                    val randomAngle = (1 until 360).random().toFloat()
+                    val randomLoops = (1 until 6).random()
+                    val randomDuration = (3000 until 6000).random()
+                    val targetRotation = (rotation.targetValue) + (randomLoops * 360f) + randomAngle
                     rotation.animateTo(
                         targetValue = targetRotation,
-                        animationSpec = tween(durationMillis = 3000, easing = LinearEasing)
-                    ) {
-                        if (value == targetRotation) {
-                            selectedIndex.value = ((rotation.targetValue % 360) / itemAngle).toInt()
-                            animationFinished.value = true
-                            onSpinEnd(selectedIndex.value, animationFinished.value)
-                        }
-                    }
+                        animationSpec = tween(
+                            durationMillis = randomDuration,
+                            easing = FastOutSlowInEasing
+                        )
+                    )
+                    var selectedAngle = 270f - (targetRotation % 360)
+                    selectedAngle = if (selectedAngle >= 0) selectedAngle else (selectedAngle+360f)
+                    selectedIndex.value = ranges.indexOfFirst { selectedAngle in it }
+                    animationFinished.value = true
+                    onSpinEnd(selectedIndex.value, animationFinished.value)
                 }
             }) {
             Text("Spin")
