@@ -1,7 +1,7 @@
 # LuckyDraw 
 
-[![Download Demo](https://github.com/whogashaga/LuckyDraw/blob/main/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp)](https://drive.google.com/file/d/1YEbWAzWzDT3bRUldtM5rhQaKQ7-6ze2L/view?usp=sharing)
-[**Demo download**](https://drive.google.com/file/d/1YEbWAzWzDT3bRUldtM5rhQaKQ7-6ze2L/view?usp=sharing)
+[![Download Demo](https://github.com/whogashaga/LuckyDraw/blob/main/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp)](https://drive.google.com/file/d/1RzVxqkgz6dbE4YGGD8XXBy6UhSjST-SK/view?usp=sharing)
+[**APK download**](https://drive.google.com/file/d/1RzVxqkgz6dbE4YGGD8XXBy6UhSjST-SK/view?usp=sharing)
 
 ## Introduction
 
