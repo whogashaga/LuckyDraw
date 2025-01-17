@@ -46,7 +46,7 @@ setContent {
 }
 ```
   
-- Jetpack Navigation
+- Jetpack Navigation is utilized to do the fragment transitions. 
 
 
 
