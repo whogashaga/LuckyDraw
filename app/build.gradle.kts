@@ -51,6 +51,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.compose.foundation)
     implementation(libs.androidx.graphics)
+    implementation(libs.androidx.navigation)
+    implementation(libs.androidx.navigation.ui)
 
     implementation(libs.androidx.fragment)
     implementation(libs.androidx.legacy.support.v4)
