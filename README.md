@@ -1,7 +1,7 @@
 # LuckyDraw 
 
-[![Download Demo](https://github.com/whogashaga/LuckyDraw/blob/main/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp)](https://drive.google.com/file/d/188FonyxL7JIkdaxHJ2ejQOT3CKsycLTF/view?usp=sharing)
-[**Demo download**](https://drive.google.com/file/d/188FonyxL7JIkdaxHJ2ejQOT3CKsycLTF/view?usp=sharing)
+[![Download Demo](https://github.com/whogashaga/LuckyDraw/blob/main/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp)](https://drive.google.com/file/d/1Qm0fM9UA2Ju2YdFJcWKex2HaaJ1bin3C/view?usp=sharing)
+[**Demo download**](https://drive.google.com/file/d/1Qm0fM9UA2Ju2YdFJcWKex2HaaJ1bin3C/view?usp=sharing)
 
 
 ## Introduction
@@ -11,6 +11,17 @@ Lucky Draw is a demonstration application that showcases Android development ski
 ## Features
 
 The app leverages the MVVM (Model-View-ViewModel) architecture to ensure efficient and maintainable code. A ViewModel dynamically manages the list of items, enabling real-time updates to the List View through LiveData observation. Additionally, a unit callback mechanism detects user interactions, allowing the ViewModel to execute corresponding actions seamlessly. This design demonstrates a robust approach to handling UI logic and data flow in Android development.
+
+- Dynamic List View with Compose LazyColumn.
+```Kotlin
+LazyColumn {
+    itemsIndexed(itemList) { _, text ->
+        Box(modifier = Modifier.animateItem(fadeInSpec, placementSpec, fadeOutSpec)) {
+            ListItem(item = text, onDelete = { onDelete.invoke(text) })
+        }
+    }
+}
+```
 
 - ViewModel is used to dynamically manage the list of items.
 ```Kotlin
@@ -38,7 +49,7 @@ setContent {
         items = viewModel.items,
         onRaffleClick = {
             if (viewModel.getItemList().isNotEmpty()) viewModel.navigateRaffle()
-            else makeShortToast("At least add two items into the list")
+            else makeShortToast(getString(R.string.at_least_two_items))
         },
         onItemAdd = { item -> viewModel.addItem(item) },
         onItemRemove = { item -> viewModel.removeItem(item) }
