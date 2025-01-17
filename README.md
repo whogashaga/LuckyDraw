@@ -8,11 +8,16 @@
 
 Lucky Draw is a demonstration application that showcases Android development skills. The app features a streamlined and user-friendly interface for managing and randomly selecting names from a list, simulating scenarios like raffles or team assignments. This project highlights key Android development concepts, including navigation, UI design, state management, and dynamic interactions.
 
+## Demo
+
+
+
 ## Features
 
 The app leverages the MVVM (Model-View-ViewModel) architecture to ensure efficient and maintainable code. A ViewModel dynamically manages the list of items, enabling real-time updates to the List View through LiveData observation. Additionally, a unit callback mechanism detects user interactions, allowing the ViewModel to execute corresponding actions seamlessly. This design demonstrates a robust approach to handling UI logic and data flow in Android development.
 
 - Dynamic List View with Compose LazyColumn.
+
 ```Kotlin
 LazyColumn {
     itemsIndexed(itemList) { _, text ->
@@ -24,6 +29,7 @@ LazyColumn {
 ```
 
 - ViewModel is used to dynamically manage the list of items.
+
 ```Kotlin
 class MainViewModel() : ViewModel() {
     private val _items = MutableLiveData<List<String>>()
@@ -43,6 +49,7 @@ class MainViewModel() : ViewModel() {
 ```
 
 - The MVVM pattern is implemented to observe LiveData for real-time updates to the List View. Additionally, a unit callback mechanism captures user interactions, enabling the ViewModel to execute corresponding actions.
+
 ```Kotlin
 setContent {
     ItemListScreen(
@@ -57,8 +64,16 @@ setContent {
 }
 ```
   
-- Jetpack Navigation is utilized to do the fragment transitions. 
+- Utilizing Jetpack Navigation in conjunction with LiveData for fragment types facilitates seamless management of fragment transitions within MainActivity. The shared Activity-level ViewModel ensures consistent data flow and state management across all fragments, streamlining the overall navigation architecture.
 
+```Kotlin
+viewModel.navigation.observe(this) { type ->
+    when (type) {
+        Navigation.Raffle -> navController.navigate(R.id.to_raffle)
+        else -> navController.navigateUp()
+    }
+}
+```
 
 
 ## License
