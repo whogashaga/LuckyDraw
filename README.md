@@ -4,16 +4,54 @@
 [**Demo download**](https://drive.google.com/file/d/188FonyxL7JIkdaxHJ2ejQOT3CKsycLTF/view?usp=sharing)
 
 
+## Introduction
+
+Lucky Draw is a demonstration application that showcases Android development skills. The app features a streamlined and user-friendly interface for managing and randomly selecting names from a list, simulating scenarios like raffles or team assignments. This project highlights key Android development concepts, including navigation, UI design, state management, and dynamic interactions.
+
 ## Features
 
-Lucky Draw is a demonstration application to showcase Android development skills. The app features a streamlined and user-friendly interface for managing and randomly selecting names from a list, simulating scenarios like raffles or team assignments. This project highlights key Android development concepts, including navigation, UI design, state management, and dynamic interactions.
+The app leverages the MVVM (Model-View-ViewModel) architecture to ensure efficient and maintainable code. A ViewModel dynamically manages the list of items, enabling real-time updates to the List View through LiveData observation. Additionally, a unit callback mechanism detects user interactions, allowing the ViewModel to execute corresponding actions seamlessly. This design demonstrates a robust approach to handling UI logic and data flow in Android development.
 
-## 
-- Jetpack Compose
-  With Compose View,
+- ViewModel is used to dynamically manage the list of items.
+```Kotlin
+class MainViewModel() : ViewModel() {
+    private val _items = MutableLiveData<List<String>>()
+    val items: LiveData<List<String>> = _items
+    fun addItem(item: String) {
+        _items.value = (items.value?.toMutableList() ?: mutableListOf()).also { items ->
+            items.add(0, item)
+        }
+    }
 
+  fun removeItem(item: String) {
+        val currentList = items.value.orEmpty().toMutableList()
+        if (currentList.remove(item))
+            _items.value = currentList
+    }
+}
+```
+
+- The MVVM pattern is implemented to observe LiveData for real-time updates to the List View. Additionally, a unit callback mechanism captures user interactions, enabling the ViewModel to execute corresponding actions.
+```Kotlin
+setContent {
+    ItemListScreen(
+        items = viewModel.items,
+        onRaffleClick = {
+            if (viewModel.getItemList().isNotEmpty()) viewModel.navigateRaffle()
+            else makeShortToast("At least add two items into the list")
+        },
+        onItemAdd = { item -> viewModel.addItem(item) },
+        onItemRemove = { item -> viewModel.removeItem(item) }
+    )
+}
+```
   
 - Jetpack Navigation
 
-  
-- Jetpack ViewModel.
+
+
+## License
+
+Copyright (c) Kerry Chen (Yen-Chun). All rights reserved.
+
+Licensed under the [MIT](LICENSE) license.
