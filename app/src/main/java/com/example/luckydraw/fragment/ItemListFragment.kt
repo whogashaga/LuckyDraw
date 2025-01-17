@@ -30,7 +30,7 @@ class ItemListFragment : Fragment() {
                     items = vm.items,
                     onRaffleClick = {
                         if (vm.getItemList().isNotEmpty()) vm.navigateRaffle()
-                        else makeShortToast("At least add two items into the list")
+                        else makeShortToast(getString(R.string.at_least_two_items))
                     },
                     onItemAdd = { item -> vm.addItem(item) },
                     onItemRemove = { item -> vm.removeItem(item) }

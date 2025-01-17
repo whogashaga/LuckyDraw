@@ -3,4 +3,5 @@
     <string name="success_removed">%1$s already removed</string>
     <string name="already_exist">%1$s already exist</string>
     <string name="waring_empty">Can Not Be Empty Name</string>
+    <string name="at_least_two_items">At least add two items into the list</string>
 </resources>
