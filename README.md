@@ -10,7 +10,13 @@ Lucky Draw is a demonstration application that showcases Android development ski
 
 ## Demo
 
+A Dynamic Item List View with robust add and delete functionalities. When the list contains more than two items, the option to proceed to the Raffle becomes available.
 
+<img src="/gif/itemList.gif" width="326" height="650"/>
+
+A Raffle feature using a visually engaging lucky wheel that dynamically incorporates names from the Item List. The name pointed to by the arrow at the top of the wheel is declared the lucky winner.
+
+<img src="/gif/nameDraw.gif" width="326" height="650"/>
 
 ## Features
 
