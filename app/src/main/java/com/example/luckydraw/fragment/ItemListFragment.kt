@@ -1,44 +1,16 @@
 package com.example.luckydraw.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.foundation.clickable
-import androidx.compose.material3.Icon
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization.Companion.Sentences
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.luckydraw.R
-import com.example.luckydraw.ui.theme.NameListScreen
+import com.example.luckydraw.ui.compose.ItemListScreen
 import com.example.luckydraw.viewmodel.MainViewModel
 
 class ItemListFragment : Fragment() {
@@ -54,64 +26,15 @@ class ItemListFragment : Fragment() {
         composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                val textState = remember { mutableStateOf("") }
-                Scaffold(
-                    floatingActionButtonPosition = FabPosition.End,
-                    floatingActionButton = {
-                        FloatingActionButton(
-                            modifier = Modifier.wrapContentSize(),
-                            onClick = {
-                                if (vm.getItemList().isNotEmpty()) vm.navigateRaffle()
-                                else makeShortToast("At least add two items into the list")
-                            },
-                            shape = RoundedCornerShape(20)
-                        ) {
-                            Text(text = "Raffle")
-                        }
+                ItemListScreen(
+                    items = vm.items,
+                    onRaffleClick = {
+                        if (vm.getItemList().isNotEmpty()) vm.navigateRaffle()
+                        else makeShortToast("At least add two items into the list")
                     },
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(it)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(16.dp)
-                        ) {
-                            Row {
-                                TextField(
-                                    value = textState.value,
-                                    keyboardOptions = KeyboardOptions(
-                                        capitalization = Sentences,
-                                        imeAction = ImeAction.Done
-                                    ),
-                                    onValueChange = { str -> textState.value = str },
-                                    trailingIcon = {
-                                        Icon(
-                                            Icons.Default.Clear,
-                                            contentDescription = "clear text",
-                                            modifier = Modifier.clickable { textState.value = "" }
-                                        )
-                                    }
-                                )
-                                Button(
-                                    modifier = Modifier
-                                        .padding(4.dp)
-                                        .wrapContentWidth(),
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
-                                    onClick = { vm.addItem(textState.value) },
-                                ) {
-                                    Text("Add", color = Color.Black)
-                                }
-                            }
-                            NameListScreen(vm.items) { name ->
-                                vm.removeItems(name)
-                            }
-                        }
-                    }
-                }
+                    onItemAdd = { item -> vm.addItem(item) },
+                    onItemRemove = { item -> vm.removeItem(item) }
+                )
             }
         }
         observeLiveData()
@@ -121,7 +44,7 @@ class ItemListFragment : Fragment() {
     private fun observeLiveData() {
         vm.removeSuccessMsg.observe(viewLifecycleOwner) { msg ->
             if (msg.isEmpty()) return@observe
-            makeShortToast(getString(R.string.success_removed, msg))
+//            makeShortToast(getString(R.string.success_removed, msg))
         }
 
         vm.alreadyExistMsg.observe(viewLifecycleOwner) { msg ->
@@ -132,7 +55,6 @@ class ItemListFragment : Fragment() {
             if (!isEmpty) return@observe
             makeShortToast(getString(R.string.waring_empty))
         }
-
     }
 
     override fun onStart() {

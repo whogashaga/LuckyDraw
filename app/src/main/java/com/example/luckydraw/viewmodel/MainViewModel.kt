@@ -33,7 +33,7 @@ class MainViewModel() : ViewModel() {
         }
     }
 
-    fun removeItems(item: String) {
+    fun removeItem(item: String) {
         val currentList = items.value.orEmpty().toMutableList()
         if (currentList.remove(item)) {
             _items.value = currentList
