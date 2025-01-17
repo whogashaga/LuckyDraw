@@ -53,6 +53,7 @@ fun LuckyDrawScreen(
             contentDescription = "Go Raffle",
             modifier = Modifier
                 .size(60.dp)
+                .padding(start = 12.dp, top = 12.dp)
                 .align(Alignment.TopStart)
                 .background(Color.White)
                 .clickable { onBackClick.invoke() }
@@ -128,7 +129,7 @@ fun LuckyDrawWheel(
             /* The Pointer at the top */
             Box(
                 Modifier
-                    .size(24.dp)
+                    .size(height = 30.dp, width = 24.dp)
                     .align(Alignment.TopCenter)
                     .rotate(180f)
                     .background(Color.Black, shape = GenericShape { size, _ -> // TriangleShape
@@ -177,7 +178,7 @@ fun LuckyDrawWheel(
         Button(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 100.dp),
+                .padding(bottom = 60.dp),
             onClick = {
                 coroutineScope.launch {
                     animationFinished.value = false
