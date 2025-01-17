@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/itemListFragment">
+
+    <fragment
+        android:id="@+id/itemListFragment"
+        android:name="com.example.luckydraw.fragment.ItemListFragment"
+        android:label="Main Fragment" />
+
+    <fragment
+        android:id="@+id/raffleFragment"
+        android:name="com.example.luckydraw.fragment.RaffleFragment"
+        android:label="Raffle Fragment" />
+</navigation>
