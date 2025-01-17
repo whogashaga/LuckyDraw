@@ -44,6 +44,8 @@ fun LuckyDrawScreen(
     onEndIndex: (Int, Boolean) -> Unit,
     onBackClick: () -> Unit
 ) {
+    val arrowRotation = remember { Animatable(0f) }
+    val scope = rememberCoroutineScope()
     Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
         LuckyDrawWheel(items = items, prefix = prefix) { resultIndex, onSpinFinished ->
             onEndIndex.invoke(resultIndex, onSpinFinished)
@@ -56,7 +58,19 @@ fun LuckyDrawScreen(
                 .padding(start = 12.dp, top = 12.dp)
                 .align(Alignment.TopStart)
                 .background(Color.White)
-                .clickable { onBackClick.invoke() }
+                .rotate(arrowRotation.value)
+                .clickable {
+                    scope.launch {
+                        arrowRotation.animateTo(
+                            targetValue = 180f,
+                            animationSpec = tween(
+                                durationMillis = 150,
+                                easing = LinearEasing
+                            )
+                        )
+                        onBackClick.invoke()
+                    }
+                }
         )
     }
 }

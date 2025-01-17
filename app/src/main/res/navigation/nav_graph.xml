@@ -6,7 +6,15 @@
     <fragment
         android:id="@+id/itemListFragment"
         android:name="com.example.luckydraw.fragment.ItemListFragment"
-        android:label="Main Fragment" />
+        android:label="Main Fragment" >
+        <action
+            android:id="@+id/to_raffle"
+            app:destination="@+id/raffleFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+    </fragment>
 
     <fragment
         android:id="@+id/raffleFragment"

@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavActionBuilder
+import androidx.navigation.NavDestination
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation.findNavController
 import com.example.luckydraw.viewmodel.MainViewModel
 
@@ -17,7 +20,8 @@ class MainActivity : AppCompatActivity() {
         vm.navigation.observe(this) { type ->
             when (type) {
                 Navigation.Raffle -> {
-                    navController.navigate(R.id.raffleFragment)
+                    navController.navigate(R.id.to_raffle)
+//                    navController.navigate(R.id.raffleFragment)
                 }
                 else -> {
                     navController.navigateUp()
