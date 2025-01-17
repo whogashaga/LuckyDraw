@@ -1,7 +1,11 @@
 package com.example.luckydraw.ui.theme
 
+import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,8 +23,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 
 //@Preview(showSystemUi = true)
@@ -30,17 +37,16 @@ fun NameListScreen(
     onDelete: (String) -> Unit
 ) {
     val itemList: List<String> by items.observeAsState(initial = emptyList())
-    Column {
-        LazyColumn {
-            itemsIndexed(itemList) { index, text ->
-                ListItem(
-                    item = text,
-                    onDelete = { onDelete.invoke(text) }
-                )
+    val fadeInSpec: FiniteAnimationSpec<Float> = spring(stiffness = 10f)
+    val placementSpec: FiniteAnimationSpec<IntOffset> = spring(stiffness = Spring.StiffnessMediumLow, visibilityThreshold = IntOffset.VisibilityThreshold)
+    val fadeOutSpec: FiniteAnimationSpec<Float> = spring(stiffness = Spring.StiffnessMediumLow)
+    LazyColumn(modifier = Modifier.clipToBounds()) {
+        itemsIndexed(itemList) { index, text ->
+            Box(modifier = Modifier.animateItem(fadeInSpec, placementSpec, fadeOutSpec)) {
+                ListItem(item = text, onDelete = { onDelete.invoke(text) })
             }
         }
     }
-
 }
 
 @Preview(showSystemUi = true)
@@ -51,16 +57,18 @@ fun ListItem(item: String = "item", onDelete: () -> Unit = {}) {
             .fillMaxWidth()
             .padding(8.dp)
             .background(MaterialTheme.colorScheme.surface)
-            .clickable { /* Handle item click */ }
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = item,
-            modifier = Modifier.weight(1f) // Take up available space
+            modifier = Modifier.weight(1f),
+            fontSize = 20.sp
         )
 
-        IconButton(onClick = onDelete) {
+        IconButton(
+            onClick = onDelete
+        ) {
             Icon(
                 imageVector = Icons.Default.Delete,
                 contentDescription = "Delete",
