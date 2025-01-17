@@ -5,7 +5,7 @@
 
 ## Introduction
 
-Lucky Draw is a demonstration application that showcases Android development skills. The app features a streamlined and user-friendly interface for managing and randomly selecting names from a list, simulating scenarios like raffles or team assignments. This project highlights key Android development concepts, including navigation, UI design, state management, and dynamic interactions.
+Lucky Draw is a demonstration application developed to highlight key Android development concepts and techniques. The app provides a streamlined and user-friendly interface for managing and randomly selecting names from a list, simulating scenarios like raffles or team assignments. This project aims to explore and integrate modern Android development tools, such as Jetpack Compose, alongside established practices like MVVM architecture, Jetpack Navigation, and state management. By combining these tools and principles, the app demonstrates the ability to implement real-time data updates with LiveData, seamless fragment transitions, and dynamic UI interactions. The objective of this project is to showcase adaptability to new technologies while maintaining a focus on creating efficient, responsive, and maintainable applications.
 
 ## Technology Stack
 
@@ -26,7 +26,7 @@ A Raffle feature using a visually engaging lucky wheel that dynamically incorpor
 
 ## Features
 
-The app leverages the MVVM (Model-View-ViewModel) architecture to ensure efficient and maintainable code. A ViewModel dynamically manages the list of items, enabling real-time updates to the List View through LiveData observation. Additionally, a unit callback mechanism detects user interactions, allowing the ViewModel to execute corresponding actions seamlessly. This design demonstrates a robust approach to handling UI logic and data flow in Android development.
+This app is developed mainly using **Jetpack Compose** to create a modern and declarative UI, following the **MVVM** architecture to separate concerns and ensure maintainability. A shared Activity-level ViewModel is used for consistent data flow and state management across fragments, while **Jetpack Navigation** provides structured and seamless fragment transitions in `MainActivity`. The app includes dynamic item list management powered by **LiveData**, enabling real-time updates for adding and deleting items. The raffle functionality is implemented with a custom **Compose**-based lucky wheel, featuring smooth animations that dynamically display names from the list and identify the winner. These components reflect the application of modern Android development techniques to build a responsive, lifecycle-aware, and well-structured demo.
 
 - Dynamic List View with Compose LazyColumn.
 
