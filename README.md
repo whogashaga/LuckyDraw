@@ -1,8 +1,7 @@
 # LuckyDraw 
 
-[![Download Demo](https://github.com/whogashaga/LuckyDraw/blob/main/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp)](https://drive.google.com/file/d/1Qm0fM9UA2Ju2YdFJcWKex2HaaJ1bin3C/view?usp=sharing)
-[**Demo download**](https://drive.google.com/file/d/1Qm0fM9UA2Ju2YdFJcWKex2HaaJ1bin3C/view?usp=sharing)
-
+[![Download Demo](https://github.com/whogashaga/LuckyDraw/blob/main/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp)](https://drive.google.com/file/d/1YEbWAzWzDT3bRUldtM5rhQaKQ7-6ze2L/view?usp=sharing)
+[**Demo download**](https://drive.google.com/file/d/1YEbWAzWzDT3bRUldtM5rhQaKQ7-6ze2L/view?usp=sharing)
 
 ## Introduction
 
@@ -13,10 +12,6 @@ Lucky Draw is a demonstration application that showcases Android development ski
 A Dynamic Item List View with add and delete functionalities. When the list contains more than two items, the option to proceed to the Raffle becomes available.
 
 <img src="/gif/itemList.gif" width="300" height="600"/>
-
-<video width="300" height="600" controls>
-  <source src="/gif/itemList.mp4" type="video/mp4">
-</video>
 
 A Raffle feature using a visually engaging lucky wheel that dynamically incorporates names from the Item List. The name pointed to by the arrow at the top of the wheel is the lucky winner.
 
@@ -74,9 +69,15 @@ setContent {
 }
 ```
   
-- Utilizing Jetpack Navigation in conjunction with LiveData for fragment types facilitates seamless management of fragment transitions within MainActivity. The shared Activity-level ViewModel ensures consistent data flow and state management across all fragments, streamlining the overall navigation architecture.
+- Utilizing Jetpack Navigation in conjunction with LiveData for fragment enum types facilitates seamless management of fragment transitions within MainActivity. The shared Activity-level ViewModel ensures consistent data flow and state management across all fragments, streamlining the overall navigation architecture.
 
 ```Kotlin
+enum class Navigation(val id: Int) {
+    Home(0x0000),
+    ItemList(R.id.itemListFragment),
+    Raffle(R.id.raffleFragment),
+}
+
 viewModel.navigation.observe(this) { type ->
     when (type) {
         Navigation.Raffle -> navController.navigate(R.id.to_raffle)
@@ -85,6 +86,12 @@ viewModel.navigation.observe(this) { type ->
 }
 ```
 
+## Feedback
+
+* File an [issue](https://github.com/whogashaga/LuckyDraw/issues)
+* Connect with the me on [Email](mailto:chen081501@hotmail.com)
+
+Thank you for your attention! Enjoy your journey on Android development!
 
 ## License
 
