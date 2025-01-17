@@ -76,7 +76,6 @@ fun LuckyDrawWheel(
         Color.Cyan,
         Color.Magenta,
         Color.Gray,
-        Color.White,
         Color.Red,
         Color.Green,
         Color.LightGray,
@@ -194,9 +193,8 @@ fun LuckyDrawWheel(
         }
 
         if (animationFinished.value) {
-            val text = prefix.ifEmpty { "We Got \n" }
             Text(
-                text = "$text${items[selectedIndex.value]}",
+                text = items[selectedIndex.value],
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .padding(top = 60.dp),
