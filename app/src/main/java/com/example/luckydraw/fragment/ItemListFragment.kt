@@ -29,7 +29,7 @@ class ItemListFragment : Fragment() {
                 ItemListScreen(
                     items = vm.items,
                     onRaffleClick = {
-                        if (vm.getItemList().isNotEmpty()) vm.navigateRaffle()
+                        if (vm.getItemList().size >= 2) vm.navigateRaffle()
                         else makeShortToast(getString(R.string.at_least_two_items))
                     },
                     onItemAdd = { item -> vm.addItem(item) },
