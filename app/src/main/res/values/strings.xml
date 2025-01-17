@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LuckyDraw</string>
+    <string name="app_name">Lucky Draw</string>
     <string name="success_removed">%1$s already removed</string>
     <string name="already_exist">%1$s already exist</string>
     <string name="waring_empty">Can Not Be Empty Name</string>
