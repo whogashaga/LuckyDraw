@@ -37,7 +37,10 @@ fun NameListScreen(
 ) {
     val itemList: List<String> by items.observeAsState(initial = emptyList())
     val fadeInSpec: FiniteAnimationSpec<Float> = spring(stiffness = 10f)
-    val placementSpec: FiniteAnimationSpec<IntOffset> = spring(stiffness = Spring.StiffnessMediumLow, visibilityThreshold = IntOffset.VisibilityThreshold)
+    val placementSpec: FiniteAnimationSpec<IntOffset> = spring(
+        stiffness = Spring.StiffnessMediumLow,
+        visibilityThreshold = IntOffset.VisibilityThreshold
+    )
     val fadeOutSpec: FiniteAnimationSpec<Float> = spring(stiffness = Spring.StiffnessMediumLow)
     LazyColumn(modifier = Modifier.clipToBounds()) {
         itemsIndexed(itemList) { index, text ->
@@ -52,12 +55,11 @@ fun NameListScreen(
 @Composable
 fun ListItem(item: String = "item", onDelete: () -> Unit = {}) {
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .background(MaterialTheme.colorScheme.surface),
     ) {
         Text(
             text = item,

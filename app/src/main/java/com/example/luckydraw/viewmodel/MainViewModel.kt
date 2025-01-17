@@ -1,6 +1,5 @@
 package com.example.luckydraw.viewmodel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,8 +8,9 @@ import com.example.luckydraw.Navigation
 class MainViewModel() : ViewModel() {
     private val _items = MutableLiveData<List<String>>()
     val items: LiveData<List<String>> = _items
-    val errorMsg by lazy { MutableLiveData<String>() }
-    val successMsg by lazy { MutableLiveData<String>() }
+    val alreadyExistMsg by lazy { MutableLiveData<String>() }
+    val isAddedEmpty by lazy { MutableLiveData<Boolean>() }
+    val removeSuccessMsg by lazy { MutableLiveData<String>() }
 
     private val _navigate = MutableLiveData<Navigation>()
     val navigation: LiveData<Navigation> = _navigate
@@ -21,9 +21,13 @@ class MainViewModel() : ViewModel() {
     }
 
     fun addItem(item: String) {
+        if (item.isEmpty()) {
+            isAddedEmpty.value = true
+            return
+        }
         _items.value = (items.value?.toMutableList() ?: mutableListOf()).also { items ->
             if (item in items) {
-                errorMsg.value = item
+                alreadyExistMsg.value = item
             } else {
                 items.add(0, item)
             }
@@ -34,7 +38,7 @@ class MainViewModel() : ViewModel() {
         val currentList = items.value.orEmpty().toMutableList()
         if (currentList.remove(item)) {
             _items.value = currentList
-            successMsg.value = item
+            removeSuccessMsg.value = item
         }
     }
 

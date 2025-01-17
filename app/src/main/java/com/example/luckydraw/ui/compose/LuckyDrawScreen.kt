@@ -193,7 +193,7 @@ fun LuckyDrawWheel(
         }
 
         if (animationFinished.value) {
-            val text = if (prefix.isEmpty()) "We Got " else prefix
+            val text = prefix.ifEmpty { "We Got \n" }
             Text(
                 text = "$text${items[selectedIndex.value]}",
                 modifier = Modifier

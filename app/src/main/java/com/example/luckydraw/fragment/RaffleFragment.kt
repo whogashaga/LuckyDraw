@@ -37,12 +37,11 @@ class RaffleFragment : Fragment(R.layout.fragment_raffle) {
                         .background(Color.White)) {
                         LuckyDrawScreen(
                             items = vm.getItemList(),
-                            "The Winner is ",
-                            { selectedIndex, _ ->
+                            onEndIndex = { selectedIndex, _ ->
                                 val name = vm.getItemList().get(selectedIndex)
                                 makeShortToast("Congratulations !\n$name")
                             },
-                            { vm.navigateHome() }
+                            onBackClick = { vm.navigateHome() }
                         )
                     }
                 }
