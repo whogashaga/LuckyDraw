@@ -7,6 +7,13 @@
 
 Lucky Draw is a demonstration application that showcases Android development skills. The app features a streamlined and user-friendly interface for managing and randomly selecting names from a list, simulating scenarios like raffles or team assignments. This project highlights key Android development concepts, including navigation, UI design, state management, and dynamic interactions.
 
+## Technology Stack
+
+- Language: Kotlin
+- Architecture: MVVM
+- UI Framework: Jetpack Compose
+- Navigation: Jetpack Navigation Component
+
 ## Demo
 
 A Dynamic Item List View with add and delete functionalities. When the list contains more than two items, the option to proceed to the Raffle becomes available.
@@ -85,6 +92,15 @@ viewModel.navigation.observe(this) { type ->
     }
 }
 ```
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/whogashaga/LuckyDraw.git
+```
+
+2. Download the [APK](https://drive.google.com/file/d/1YEbWAzWzDT3bRUldtM5rhQaKQ7-6ze2L/view?usp=sharing) and install it on Android devices. Then Have Fun!
 
 ## Feedback
 
