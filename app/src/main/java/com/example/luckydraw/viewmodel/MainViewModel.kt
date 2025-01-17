@@ -16,7 +16,8 @@ class MainViewModel() : ViewModel() {
     val navigation: LiveData<Navigation> = _navigate
 
     init {
-        _items.value = mutableListOf("Basketball", "Volleyball", "Tennis", "Swim", "Snowboarding")
+        _items.value = mutableListOf("Basketball", "Volleyball", "Tennis", "Swim", "Snowboarding",
+            "PC Games", "Skiing", "Badminton", "Golf", "Polo", "Soccer", "Video Games", "Nintendo")
     }
 
     fun addItem(item: String) {
