@@ -1,4 +1,4 @@
-package com.example.luckydraw.ui
+package com.example.luckydraw.ui.shapes
 
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Matrix

@@ -1,4 +1,4 @@
-package com.example.luckydraw
+package com.example.luckydraw.fragment
 
 import android.graphics.Paint
 import androidx.fragment.app.viewModels
@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.luckydraw.R
 import com.example.luckydraw.ui.theme.LuckyDrawTheme
 import com.example.luckydraw.viewmodel.MainViewModel
 import com.example.luckydraw.viewmodel.RaffleViewModel
@@ -67,12 +69,11 @@ class RaffleFragment : Fragment(R.layout.fragment_raffle) {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 LuckyDrawTheme(darkTheme = false) {
-                    LuckyDrawTheme(darkTheme = false) {
-                        LuckyDrawScreen(
-                            items = mainViewModel.getItemList(),
-                            "The Winner is "
-                        )
-                    }
+                    LuckyDrawScreen(
+                        items = mainViewModel.getItemList(),
+                        "The Winner is "
+                    )
+
                 }
             }
         }
@@ -81,25 +82,29 @@ class RaffleFragment : Fragment(R.layout.fragment_raffle) {
 
     @Composable
     fun LuckyDrawScreen(items: List<String>, prefix: String = "") {
-        val selectedIndex = remember { mutableStateOf(-1) }
+        val selectedIndex = remember { mutableIntStateOf(-1) }
         val onSpinEnd = remember { mutableStateOf(false) }
 
         LuckyDrawWheel(items = items, prefix = prefix) { resultIndex, onSpinFinished ->
-            selectedIndex.value = resultIndex
+            selectedIndex.intValue = resultIndex
             onSpinEnd.value = onSpinFinished
         }
 
         if (onSpinEnd.value) {
             Toast.makeText(
                 LocalContext.current,
-                "Congratulations!\n${items[selectedIndex.value]}",
+                "Congratulations!\n${items[selectedIndex.intValue]}",
                 Toast.LENGTH_SHORT
             ).show()
         }
     }
 
     @Composable
-    fun LuckyDrawWheel(items: List<String>, prefix: String = "", onSpinEnd: (Int, Boolean) -> Unit) {
+    fun LuckyDrawWheel(
+        items: List<String>,
+        prefix: String = "",
+        onSpinEnd: (Int, Boolean) -> Unit
+    ) {
         val rotation = remember { Animatable(0f) }
         val itemAngle = 360f / items.size
         val coroutineScope = rememberCoroutineScope()
@@ -120,13 +125,17 @@ class RaffleFragment : Fragment(R.layout.fragment_raffle) {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)) {
-                Canvas(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
-                    .rotate(rotation.value)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+            ) {
+                Canvas(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                        .rotate(rotation.value)
+                ) {
                     items.forEachIndexed { index, text ->
                         val startAngle = index * itemAngle
                         drawArc(
@@ -184,7 +193,8 @@ class RaffleFragment : Fragment(R.layout.fragment_raffle) {
                         val randomAngle = (1 until 360).random().toFloat()
                         val randomLoops = (1 until 6).random()
                         val randomDuration = (3000 until 6000).random()
-                        val targetRotation = (rotation.targetValue) + (randomLoops * 360f) + randomAngle
+                        val targetRotation =
+                            (rotation.targetValue) + (randomLoops * 360f) + randomAngle
                         rotation.animateTo(
                             targetValue = targetRotation,
                             animationSpec = tween(
@@ -193,7 +203,8 @@ class RaffleFragment : Fragment(R.layout.fragment_raffle) {
                             )
                         )
                         var selectedAngle = 270f - (targetRotation % 360)
-                        selectedAngle = if (selectedAngle >= 0) selectedAngle else (selectedAngle+360f)
+                        selectedAngle =
+                            if (selectedAngle >= 0) selectedAngle else (selectedAngle + 360f)
                         selectedIndex.value = ranges.indexOfFirst { selectedAngle in it }
                         animationFinished.value = true
                         onSpinEnd(selectedIndex.value, animationFinished.value)
