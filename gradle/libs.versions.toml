@@ -1,6 +1,6 @@
 [versions]
 agp = "8.7.3"
-kotlin = "2.0.0"
+kotlin = "2.0.20"
 googleKsp = "2.0.21-1.0.27"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -44,6 +44,7 @@ compose-foundation = { group = "androidx.compose.foundation", name = "foundation
 androidx-navigation = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation"}
 androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation"}
 androidx-bundles-room = { group = "androidx.room", name = "room-runtime", version.ref = "room"}
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room"}
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room"}
 dagger-bundles-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "daggerHilt"}
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "daggerHilt"}
