@@ -31,14 +31,15 @@ import androidx.compose.ui.text.input.KeyboardCapitalization.Companion.Sentences
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import com.example.luckydraw.R
+import com.example.luckydraw.model.Item
 import com.example.luckydraw.ui.theme.NameListScreen
 
 @Composable
 fun ItemListScreen(
-    items: LiveData<List<String>>,
+    items: LiveData<List<Item>>,
     onRaffleClick: () -> Unit,
-    onItemAdd: (String) -> Unit,
-    onItemRemove: (String) -> Unit,
+    onItemAdd: (Item) -> Unit,
+    onItemRemove: (Item) -> Unit,
 ) {
     val textState = remember { mutableStateOf("") }
     Scaffold(
@@ -84,13 +85,13 @@ fun ItemListScreen(
                             .padding(4.dp)
                             .wrapContentWidth(),
                         colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
-                        onClick = { onItemAdd(textState.value) },
+                        onClick = { onItemAdd(Item(name = textState.value, date = System.currentTimeMillis())) },
                     ) {
                         Text("Add", color = Color.Black)
                     }
                 }
-                NameListScreen(items) { name ->
-                    onItemRemove.invoke(name)
+                NameListScreen(items) { item ->
+                    onItemRemove.invoke(item)
                 }
             }
         }

@@ -28,14 +28,15 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
+import com.example.luckydraw.model.Item
 
 //@Preview(showSystemUi = true)
 @Composable
 fun NameListScreen(
-    items: LiveData<List<String>>,
-    onDelete: (String) -> Unit
+    items: LiveData<List<Item>>,
+    onDelete: (Item) -> Unit
 ) {
-    val itemList: List<String> by items.observeAsState(initial = emptyList())
+    val itemList: List<Item> by items.observeAsState(initial = emptyList())
     val fadeInSpec: FiniteAnimationSpec<Float> = spring(stiffness = 10f)
     val placementSpec: FiniteAnimationSpec<IntOffset> = spring(
         stiffness = Spring.StiffnessMediumLow,
@@ -43,9 +44,9 @@ fun NameListScreen(
     )
     val fadeOutSpec: FiniteAnimationSpec<Float> = spring(stiffness = Spring.StiffnessMediumLow)
     LazyColumn(modifier = Modifier.clipToBounds()) {
-        itemsIndexed(itemList) { index, text ->
+        itemsIndexed(itemList) { _, item ->
             Box(modifier = Modifier.animateItem(fadeInSpec, placementSpec, fadeOutSpec)) {
-                ListItem(item = text, onDelete = { onDelete.invoke(text) })
+                ListItem(item = item, onDelete = { onDelete.invoke(item) })
             }
         }
     }
@@ -53,7 +54,7 @@ fun NameListScreen(
 
 @Preview(showSystemUi = true)
 @Composable
-fun ListItem(item: String = "item", onDelete: () -> Unit = {}) {
+fun ListItem(item: Item = Item(), onDelete: () -> Unit = {}) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -62,7 +63,7 @@ fun ListItem(item: String = "item", onDelete: () -> Unit = {}) {
             .background(MaterialTheme.colorScheme.surface),
     ) {
         Text(
-            text = item,
+            text = item.name,
             modifier = Modifier.weight(1f),
             fontSize = 20.sp
         )

@@ -33,13 +33,14 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.luckydraw.model.Item
 import kotlinx.coroutines.launch
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
 fun LuckyDrawScreen(
-    items: List<String>,
+    items: List<Item>,
     prefix: String = "",
     onEndIndex: (Int, Boolean) -> Unit,
     onBackClick: () -> Unit
@@ -77,7 +78,7 @@ fun LuckyDrawScreen(
 
 @Composable
 fun LuckyDrawWheel(
-    items: List<String>,
+    items: List<Item>,
     prefix: String = "",
     onSpinEnd: (Int, Boolean) -> Unit
 ) {
@@ -111,7 +112,7 @@ fun LuckyDrawWheel(
                     .padding(8.dp)
                     .rotate(rotation.value)
             ) {
-                items.forEachIndexed { index, text ->
+                items.forEachIndexed { index, item ->
                     val startAngle = index * itemAngle
                     drawArc(
                         color = colorList[index % colorList.size],
@@ -127,7 +128,7 @@ fun LuckyDrawWheel(
                     )
                     drawContext.canvas.nativeCanvas.apply {
                         drawText(
-                            text,
+                            item.name,
                             textPosition.x,
                             textPosition.y,
                             Paint().apply {
@@ -208,7 +209,7 @@ fun LuckyDrawWheel(
 
         if (animationFinished.value) {
             Text(
-                text = items[selectedIndex.value],
+                text = items[selectedIndex.value].name,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .padding(top = 60.dp),

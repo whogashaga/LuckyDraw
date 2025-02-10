@@ -38,7 +38,7 @@ class RaffleFragment : Fragment(R.layout.fragment_raffle) {
                         LuckyDrawScreen(
                             items = vm.getItemList(),
                             onEndIndex = { selectedIndex, _ ->
-                                val name = vm.getItemList().get(selectedIndex)
+                                val name = vm.getItemList()[selectedIndex].name
                                 makeShortToast("Congratulations !\n$name")
                             },
                             onBackClick = { vm.navigateHome() }
