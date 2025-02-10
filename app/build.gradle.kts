@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.navigation)
     implementation(libs.androidx.navigation.ui)
     implementation(libs.kotlin.coroutines)
+    implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.bundles.room)
     ksp (libs.room.compiler)
     implementation(libs.dagger.bundles.hilt)
