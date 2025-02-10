@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.google.ksp)
 }
 
@@ -54,6 +55,8 @@ dependencies {
     implementation(libs.androidx.graphics)
     implementation(libs.androidx.navigation)
     implementation(libs.androidx.navigation.ui)
+    implementation(libs.dagger.bundles.hilt)
+    ksp (libs.hilt.compiler)
 
     implementation(libs.androidx.fragment)
     implementation(libs.androidx.legacy.support.v4)
