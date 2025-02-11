@@ -1,7 +1,7 @@
 # LuckyDraw 
 
-[![Download Demo](https://github.com/whogashaga/LuckyDraw/blob/main/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp)](https://drive.google.com/file/d/1RzVxqkgz6dbE4YGGD8XXBy6UhSjST-SK/view?usp=sharing)
-[**APK download**](https://drive.google.com/file/d/1RzVxqkgz6dbE4YGGD8XXBy6UhSjST-SK/view?usp=sharing)
+[![Download Demo](https://github.com/whogashaga/LuckyDraw/blob/main/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp)](https://drive.google.com/file/d/1YpRD_ymf6f2z4yhIT3JYOcFP5qes5ivI/view?usp=drive_link)
+[**APK download**](https://drive.google.com/file/d/1YpRD_ymf6f2z4yhIT3JYOcFP5qes5ivI/view?usp=drive_link)
 
 ## Introduction
 
@@ -92,6 +92,36 @@ viewModel.navigation.observe(this) { type ->
     }
 }
 ```
+
+- The `Item` class represents an entity in the Room Database, designed to persist the item history for the draw items. Each `Item` entry consists of a unique name as the primary key and an added date stored as a timestamp (Long). This structure ensures efficient data retrieval and persistence while enabling historical tracking of selected items.
+
+```Kotlin
+@Entity(tableName = "items_table")
+data class Item(
+    @PrimaryKey
+    @ColumnInfo(name = "item_name")
+    val name: String = "",
+    @ColumnInfo(name = "added_date")
+    val date: Long = 0L,
+)
+```
+
+- Leveraging Dagger Hilt for dependency injection to ensure efficient and scalable data management. The `LocalDataRepository` class acts as an abstraction layer over `ItemDao`, providing methods to insert, delete, and retrieve items from the Room Database. It is injected into `MainViewModel` to facilitate seamless data access without tightly coupling UI components to database operations. By utilizing Hilt, the app promotes a modular and testable architecture, reducing boilerplate code and improving maintainability.
+
+```Kotlin
+class LocalDataRepository @Inject constructor (private val itemDao: ItemDao) {
+    suspend fun insertItem(items: Item) {
+        itemDao.insert(items)
+    }
+
+    suspend fun deleteItem(name: String) {
+        itemDao.delete(name)
+    }
+
+    suspend fun getItemsOrderedByDate(): List<Item> = itemDao.getItemsOrderedByDate()
+}
+```
+
 
 ## Installation
 
